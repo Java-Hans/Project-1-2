@@ -69,6 +69,7 @@ class card_recog2:
 		cv2.waitKey(0)
 
 	def match_hole_cards(self):
+		hole_cards = []
 		#print("Running suit match")
 		suit_result = self.t_matching(self.suits, 0.9)
 		#print("Running value match")
@@ -84,7 +85,7 @@ class card_recog2:
 
 		if len(suit_result) == 0 or len(card_number_result) == 0:
 			print("No cards recognised")
-			return False
+			return False, None
 
 		#Assume the first item in list is the left card
 		left_suit = suit_result[0][1]
@@ -101,10 +102,11 @@ class card_recog2:
 			right_number = card_number_result[0][1]
 			left_number = card_number_result[1][1]
 
-		print("You have", left_number, "of", left_suit)
-		print("and", right_number, "of", right_suit)
+		# print("You have", left_number, "of", left_suit)
+		# print("and", right_number, "of", right_suit)
+		hole_cards = [str(left_number) + str(left_suit), str(right_number + str(right_suit))]
 
-		return True
+		return True, hole_cards
 
 
 

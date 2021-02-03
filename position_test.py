@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import pyautogui
 from card_recog2 import card_recog2
+from Player import Player
 
 img_gray = pyautogui.screenshot()
 img_gray = cv2.cvtColor(np.array(img_gray), cv2.COLOR_RGB2GRAY)
@@ -16,39 +17,6 @@ position_names = ['Dealer', 'Small Blind', 'Big Blind', 'UTG',
 table_size = 10
 players_active = 0
 
-class Player:
-    def __init__(self, seat_number):
-        self.seat_number = seat_number
-        self.active = False
-        self.position = None
-
-    def get_seat_number(self):
-        return self.seat_number
-
-    # takes a list in the form [x1, x2, y1, y2]
-    def set_hole_card_crop(self, hold_card_crop):
-        self.hole_card_crop = hold_card_crop
-
-    def get_hole_card_crop(self):
-        return self.hole_card_crop
-
-    def set_active(self, active):
-        self.active = active
-
-    def get_active(self):
-        return self.active
-
-    def set_position(self, position):
-        self.position = position
-
-    def get_position(self):
-        return self.position
-
-    def print_position(self):
-        print(self.position)
-
-    def print_active(self):
-        print(self.active)
 
 myself = Player('Player seat')
 seat_one = Player('Seat 1')
@@ -78,18 +46,6 @@ cx1, cx2, cy1, cy2 = hole_card_coord[0], hole_card_coord[1], hole_card_coord[2],
 
 hole_cards = cropped_img[int(y2 * cy1):int(y2 * cy2),
              int(x2 * cx1):int(x2 * cx2)]
-
-
-# myself.set_active(True)
-# if myself.active:
-#     print('hello active')
-# else:
-#     print('not active')
-# myself.print_active()
-
-
-
-
 
 def show_position(cx1, cx2, cy1, cy2):
     i_height, i_width = cropped_img.shape[:2]
@@ -184,29 +140,9 @@ def find_button10():
             print('something wrong, cant find button')
 find_button10()
 
-for seat in seat_list:
-    if seat.get_position() == position_names[0]:
-        print(seat.get_seat_number() + '  jaaaaaaaa' + seat.get_position())
-
-
-# def crop_and_match(description, the_image, the_threshold, the_template, cx1, cx2, cy1, cy2):
-#     any_match = False
-#     i_height, i_width = the_image.shape[:2]
-#     cropped_window = the_image[int(cy1 * i_height):int(cy2 * i_height), int(cx1 * i_width):int(cx2 * i_width)]
-#     match_result = cv2.matchTemplate(cropped_window, the_template, cv2.TM_CCOEFF_NORMED)
-#     match_location = np.where(match_result >= the_threshold)
-#     list_of_match = list(zip(*match_location[::-1]))
-#     if not list_of_match:
-#         print('no one at ' + description)
-#         any_match = False
-#     else:
-#         print('player at ' + description)
-#         any_match = True
-#     # cv2.imshow(description, cropped_window)
-#     # cv2.waitKey(0)
-#
-#     return any_match
-
+# for seat in seat_list:
+#     if seat.get_position() == position_names[0]:
+#         print(seat.get_seat_number() + '  jaaaaaaaa' + seat.get_position())
 
 
 def crop_and_match2(description, the_image, the_threshold, the_template, crop_coord):
@@ -218,50 +154,39 @@ def crop_and_match2(description, the_image, the_threshold, the_template, crop_co
     match_location = np.where(match_result >= the_threshold)
     list_of_match = list(zip(*match_location[::-1]))
     if not list_of_match:
-        print('no one at ' + description)
+        #print('no one at ' + description)
         any_match = False
     else:
-        print('player at ' + description)
+        #print('player at ' + description)
         any_match = True
     # cv2.imshow(description, cropped_window)
     # cv2.waitKey(0)
 
     return any_match
 
-
-
-# def count_active_players():
-#     active_players = 0
-#     for k in positions_list_10:
-#
-#         if crop_and_match(k[0], cropped_img, 0.85, cards_back_template, k[1], k[2], k[3], k[4]):
-#             active_players += 1
-#     if card_recog_obj.match_hole_cards():
-#         active_players += 1
-#
-#     print('Players active: ' + str(active_players))
-
 def count_active_players2():
     active_players = 0
+    myself_active, my_hole_cards = card_recog_obj.match_hole_cards()
     for player in seat_list:
 
         if crop_and_match2(player.get_seat_number(), cropped_img, 0.85, cards_back_template,
                           player.get_hole_card_crop()):
             active_players += 1
             player.set_active(True)
-    if card_recog_obj.match_hole_cards():
+    if myself_active:
         myself.set_active(True)
         active_players += 1
+        print(my_hole_cards)
 
     print('Players active: ' + str(active_players))
     return active_players
 players_active = count_active_players2()
 
-for the_player in seat_list:
-    player_seat = the_player.get_seat_number()
-
-    if the_player.get_active():
-        print(the_player.get_seat_number() + ' is active')
+# for the_player in seat_list:
+#     player_seat = the_player.get_seat_number()
+#
+#     if the_player.get_active():
+#         print(the_player.get_seat_number() + ' is active')
 
 button_index = -1
 for player in seat_list:
@@ -272,14 +197,6 @@ for player in seat_list:
 assigned_seats = 0
 k = 1
 
-# while assigned_seats < players_active:
-#     if seat_list[(button_index+k)%table_size].get_active():
-#         seat_list[(button_index+k)%table_size].set_position(position_names[1])
-#         # print('index is ' + str((button_index+k)%table_size))
-#         # print('is this even being run? ' + seat_list[(button_index+k)%table_size])
-#         assigned_seats += 10
-#
-#     assigned_seats += 1
 
 def find_small_blind():
     for k in range(1,table_size-1):
