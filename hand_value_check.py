@@ -384,7 +384,7 @@ def raise_value_error(message):
 
 #hand_value_check(('5s'), '5h', '5d', '3d')
 #hand_value_check(('bc', '6c'), '3c', '4c', '2c')
-hand_value_check(('Ac', 'Jc'), '6d', 'As', '8s', '4s', 'Ad')
+#hand_value_check(('Ac', 'Jc'), '6d', 'As', '8s', '4s', 'Ad')
 
 
 

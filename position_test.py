@@ -3,12 +3,15 @@ import numpy as np
 import pyautogui
 from card_recog2 import card_recog2
 from Player import Player
+from hand_value_check import hand_value_check
 
 img_gray = pyautogui.screenshot()
 img_gray = cv2.cvtColor(np.array(img_gray), cv2.COLOR_RGB2GRAY)
 x1, x2 = 0, 800
 y1, y2 = 0, 580
 cropped_img = img_gray[y1:y2, x1:x2]
+bx1, bx2 = int(0.25*x2), int(0.75*x2)
+by1, by2 = int(0.3*y2), int(0.5*y2)
 cards_back_template = cv2.imread('images2/base_img/cards.png', 0)
 cv2.imwrite('images2/window.png', cropped_img)
 
@@ -17,6 +20,14 @@ position_names = ['Dealer', 'Small Blind', 'Big Blind', 'UTG',
 table_size = 10
 players_active = 0
 
+board_cards, board_path = cropped_img[by1:by2,bx1:bx2], 'images2/board_cards.png'
+cv2.imwrite(board_path, board_cards)
+cv2.imshow('board cards',board_cards)
+cv2.waitKey(0)
+##board_path = 'images2/board_cards.png'
+board_obj = card_recog2(board_path)
+board_list = board_obj.read_board_cards()
+print(board_list)
 
 myself = Player('Player seat')
 seat_one = Player('Seat 1')
@@ -176,7 +187,8 @@ def count_active_players2():
     if myself_active:
         myself.set_active(True)
         active_players += 1
-        print(my_hole_cards)
+        myself.set_hole_cards(my_hole_cards)
+        print(myself.get_hole_cards())
 
     print('Players active: ' + str(active_players))
     return active_players
@@ -216,4 +228,7 @@ test_assign_positions()
 for seat in seat_list:
     print(str(seat.get_seat_number()) + ' ' + str(seat.get_position()))
 
+# print(hole_cards)
+# print(*board_list)
 
+hand_value_check(myself.get_hole_cards(),*board_list)

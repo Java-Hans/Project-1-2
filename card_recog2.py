@@ -7,10 +7,11 @@ class card_recog2:
 	def __init__(self, img_path):
 		self.img_path = img_path
 
-	suits = ["Spades.png", "Hearts.png", "Diamonds.png", "Clubs.png"]
+	suits = ["s.png", "h.png", "d.png", "c.png"]
 	card_numbers = ["A.png", "2.png", "3.png", "4.png", "5.png", "6.png",\
-			"7.png", "8.png", "9.png", "10.png", "J.png", "Q.png", "K.png"]
+			"7.png", "8.png", "9.png", "T.png", "J.png", "Q.png", "K.png"]
 
+	#Returns [(x,y), template]
 	def t_matching(self, t_list,threshold):
 		img_rgb = cv2.imread(self.img_path)
 		img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
@@ -46,10 +47,7 @@ class card_recog2:
 				if not repeat:
 					new_match_list.append(sloc)
 
-			#print("length of new match list", len(new_match_list))
-				
-
-			print("{} card(s) matched: {}".format(len(new_match_list),t_file[:-4]))
+			#print("{} card(s) matched: {}".format(len(new_match_list),t_file[:-4]))
 
 			min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
 
@@ -60,13 +58,7 @@ class card_recog2:
 	#match percentage is {}".format(pt, t_file[:-4], max_val))
 			    result.append((pt,t_file[:-4]))
 
-			#print("{}\n".format(cv2.minMaxLoc(res)))
-
-		#print("and the final list is {}".format(result))
 		return result
-
-		cv2.imshow('Detected',img_rgb)
-		cv2.waitKey(0)
 
 	def match_hole_cards(self):
 		hole_cards = []
@@ -107,6 +99,24 @@ class card_recog2:
 		hole_cards = [str(left_number) + str(left_suit), str(right_number + str(right_suit))]
 
 		return True, hole_cards
+
+	def read_board_cards(self):
+		suit_result = self.t_matching(self.suits, 0.9)
+		card_number_result = self.t_matching(self.card_numbers, 0.9)
+
+		if len(suit_result) != len(card_number_result):
+			print('Suit and card numbers don\'t match')
+			return False
+
+		suit_result.sort()
+		card_number_result.sort()
+		result_list = []
+
+		for number, suit in zip(card_number_result, suit_result):
+			result_list.append(number[1]+suit[1])
+
+		return result_list
+
 
 
 

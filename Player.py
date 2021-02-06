@@ -31,3 +31,9 @@ class Player:
 
     def print_active(self):
         print(self.active)
+
+    def set_hole_cards(self, hole_card_list):
+        self.hole_card_list = hole_card_list
+
+    def get_hole_cards(self):
+        return tuple(self.hole_card_list)
