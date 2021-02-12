@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 import pyautogui
 
-class card_recog2:
+
+class CardRecog2:
 
 	def __init__(self, img_path):
 		self.img_path = img_path
@@ -31,7 +32,7 @@ class card_recog2:
 			if len(match_list) == 0:
 				continue
 
-			# Now to filter the duplicate matches that are a few pixels apart.	
+			# Now to filter the duplicate matches that are a few pixels apart.
 			new_match_list = []
 
 			for sloc in match_list:
@@ -76,7 +77,7 @@ class card_recog2:
 		right_number = ""
 
 		if len(suit_result) == 0 or len(card_number_result) == 0:
-			print("No cards recognised")
+			# print("No cards recognised")
 			return False, None
 
 		#Assume the first item in list is the left card

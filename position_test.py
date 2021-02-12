@@ -1,9 +1,10 @@
 import cv2
 import numpy as np
 import pyautogui
-from card_recog2 import card_recog2
+from cardrecog2 import CardRecog2
 from Player import Player
-from hand_value_check import hand_value_check
+from hand_strength import hand_value_check
+# from hand_strength import HandStrength
 
 img_gray = pyautogui.screenshot()
 img_gray = cv2.cvtColor(np.array(img_gray), cv2.COLOR_RGB2GRAY)
@@ -24,9 +25,9 @@ cv2.imwrite(board_path, board_cards)
 # cv2.imshow('board cards',board_cards)
 # cv2.waitKey(0)
 ##board_path = 'images2/board_cards.png'
-board_obj = card_recog2(board_path)
+board_obj = CardRecog2(board_path)
 board_list = board_obj.read_board_cards()
-print(board_list)
+
 
 myself = Player('Player seat')
 seat_one = Player('Seat 1')
@@ -66,7 +67,7 @@ def show_position(cx1, cx2, cy1, cy2):
 #show_position(0.04, 0.22, 0.12, 0.32)
 
 cv2.imwrite('my_hole_cards.png', hole_cards)
-card_recog_obj = card_recog2('my_hole_cards.png')
+card_recog_obj = CardRecog2('my_hole_cards.png')
 # cv2.imshow('my hole cards', hole_cards)
 # cv2.waitKey(0)
 
@@ -114,40 +115,51 @@ def find_button10():
     for pt in zip(*loc[::-1]):
         #marks location of button on image (for reference purposes)
         #cv2.circle(cropped_img, (pt[0], pt[1]), radius=5, color=(255, 255, 255), thickness=5)
-        print('location: ' + str(pt[0]) + " " + str(pt[1]))
+        #print('location: ' + str(pt[0]) + " " + str(pt[1]))
 
         if int(0.49*x2) >= pt[0] > int(0.36*x2) and pt[1] > int(0.4*y2):
             myself.set_position(position_names[0])
             #print('You are the button')
+            return 0
         elif pt[0] < int(0.36*x2) and pt[1] > int(0.48*y2):
             seat_one.set_position(position_names[0])
+            return 1
             #print('button at position 1')
         elif pt[0] < int(0.25*x2) and int(0.36*y2) < pt[1] < int(0.48*y2):
             seat_two.set_position(position_names[0])
+            return 2
             #print('button at position 2')
         elif pt[0] < int(0.25*x2) and pt[1] < int(0.36*y2):
             seat_three.set_position(position_names[0])
+            return 3
             #print('button at position 3')
         elif int(0.28*x2) < pt[0] < int(0.49*x2) and pt[1] < int(0.33*y2):
             seat_four.set_position(position_names[0])
+            return 4
             #print('button at position 4')
         elif int(0.49*x2) < pt[0] < int(0.7*x2) and pt[1] < int(0.33*y2):
             seat_five.set_position(position_names[0])
+            return 5
             #print('button at position at 5')
         elif pt[0] > int(0.7*x2) and pt[1] < int(0.36*y2):
             seat_six.set_position(position_names[0])
+            return 6
             #print('button at position 6')
         elif pt[0] > int(0.7*x2) and int(0.36*y2) < pt[1] < int(0.48*y2):
             seat_seven.set_position(position_names[0])
+            return 7
             #print('button at position 7')
         elif pt[0] > int(0.62*x2) and pt[1] > int(0.48*y2):
             seat_eight.set_position(position_names[0])
+            return 8
             #print('button at position 8')
         elif int(0.49*x2) < pt[0] < int(0.62*x2) and pt[1] > int(0.57*y2):
             seat_nine.set_position(position_names[0])
+            return 9
             #print('button at positon 9')
         else:
             print('something wrong, cant find button')
+            return -1
 # find_button10()
 
 
@@ -184,16 +196,15 @@ def count_active_players2():
         myself.set_active(True)
         active_players += 1
         myself.set_hole_cards(my_hole_cards)
-        print(myself.get_hole_cards())
+        # print(f'yolo hole cards {myself.get_hole_cards()}')
 
-    print('Players active: ' + str(active_players))
     return active_players
-# players_active = count_active_players2()
 
-def find_button_seat(list_seats):
-    for a_seat in list_seats:
-        if a_seat.get_position() == position_names[0]:
-            return list_seats.index(a_seat)
+
+# def find_button_seat(list_seats):
+#     for a_seat in list_seats:
+#         if a_seat.get_position() == position_names[0]:
+#             return list_seats.index(a_seat)
 
 def test_assign_positions(btn_index):
     pos_index = 1
@@ -202,16 +213,37 @@ def test_assign_positions(btn_index):
             seat_list[(btn_index + p) % table_size].set_position(position_names[pos_index])
             pos_index += 1
 
-count_active_players2()
-find_button10()
-print(f'Button seat location: {find_button_seat(seat_list)}')
-test_assign_positions(find_button_seat(seat_list))
+print(f'board cards: {board_list}')
+num_active_players = count_active_players2()
+my_h_cards = myself.get_hole_cards() if myself.active else None
+
+print(f'Players active: {num_active_players}')
+# print(f'yo ho hole cards: {myself.get_hole_cards()}') if myself.active else print('player not active')
+print(my_h_cards)
+button_location = find_button10()
+# h_strength_obj = HandStrength
+print(f'Button seat location: {button_location}')
+test_assign_positions(button_location)
 
 for seat in seat_list:
-    print(str(seat.get_seat_number()) + ' ' + str(seat.get_position()) + ', Active: ' + str(seat.get_active()))
+    print(str(seat.get_seat_number()) + ' ' + str(seat.get_position()) + ',\t\t Active: ' + str(seat.get_active()))
 
 # print(hole_cards)
 # print(*board_list)
 
 if len(board_list) >= 3 and myself.active:
     hand_value_check(myself.get_hole_cards(),*board_list)
+
+with open("Output.txt", "a") as text_file:
+    text_file.write(f'Board cards:\t\t {board_list}\n')
+    text_file.write(f'Players active:\t\t {num_active_players}\n')
+    text_file.write(f'My Hole cards:\t\t {my_h_cards}\n')
+    text_file.write(f'Button index location\t {button_location}\n')
+    for seat in seat_list:
+        text_file.write(str(seat.get_seat_number()) + ' ' + str(seat.get_position()) + ',\t\t Active: ' + str(seat.get_active()) + '\n')
+    text_file.write(f'---------------------------------\n\n')
+
+
+
+    # for i in range(2):
+    #     text_file.write(f"a number: {i}\n")

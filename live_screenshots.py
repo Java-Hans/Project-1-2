@@ -3,7 +3,7 @@ import pyautogui
 import imutils
 import cv2
 import time
-from card_recog2 import card_recog2
+from cardrecog2 import CardRecog2
 
 while True:
     my_image = pyautogui.screenshot()
@@ -22,7 +22,7 @@ while True:
     cv2.imshow("cropped", hole_cards)
     cv2.waitKey(1000)
 
-    test_ins1 = card_recog2('hole_cards.png')
+    test_ins1 = CardRecog2('hole_cards.png')
     #test_ins1.match_hole_cards()
     if test_ins1.match_hole_cards():
         print('yes it is true')

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import pyautogui
-from card_recog2 import card_recog2
+from cardrecog2 import CardRecog2
 
 img_gray = pyautogui.screenshot()
 img_gray = cv2.cvtColor(np.array(img_gray), cv2.COLOR_RGB2GRAY)
@@ -120,7 +120,7 @@ def show_position(cx1, cx2, cy1, cy2):
 #show_position(0.04, 0.22, 0.12, 0.32)
 
 cv2.imwrite('my_hole_cards.png', hole_cards)
-card_recog_obj = card_recog2('my_hole_cards.png')
+card_recog_obj = CardRecog2('my_hole_cards.png')
 # cv2.imshow('my hole cards', hole_cards)
 # cv2.waitKey(0)
 

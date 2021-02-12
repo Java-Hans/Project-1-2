@@ -1,6 +1,12 @@
 import sys
 from collections import Counter
 
+
+# class HandStrength:
+
+	# def __init__(self, img_path):
+	# 	self.img_path = img_path
+
 #Use hand_value_check function with argument of the format:
 #('5d', 'Qd'), 'Ad', 'Kd', 'Jd', 'Td'
 
@@ -23,7 +29,7 @@ def check_straight(all_cards):
 	for x in range(len(all_cards)-4):
 		count = 0
 		temp_hand = all_cards[x:x+5]
-		
+
 		for index in range(len(temp_hand)-1):
 			if temp_hand[index+1][0] == temp_hand[index][0]-1:
 				count += 1
@@ -83,7 +89,7 @@ def check_straight_flush(all_cards):
 
 	all_cards = [x for x in all_cards if x[1] == com_suit]
 
-	
+
 	#Shortcut to evaluate when aces are low as well as high:
 	#create new array where aces are value 1 and append to
 	#all_cards, so low and high both evaulated.
@@ -149,7 +155,7 @@ def check_full_house(all_cards):
 			largest = max(common_cards[0][0], common_cards[1][0])
 			smallest = min(common_cards[0][0], common_cards[1][0])
 
-		
+
 		three_kind = [x for x in all_cards if x[0] == largest]
 		assert len(three_kind) == 3, "Your three kind len is wrong"
 
@@ -232,7 +238,7 @@ tuple.")
 
 	board_list = hole_cards + board
 
-	#Exception handling to catch repeats. 
+	#Exception handling to catch repeats.
 	#set removes all duplicates, list length then compared.
 	if len(board_list) != len(set(board_list)):
 		raise_value_error("You have repeated cards")
@@ -251,7 +257,7 @@ use 6h (from ten onwards use letters: Th, Kd")
 			or card[1:].upper() == 'C' or card[1:].upper() == 'D'):
 			raise_value_error("cannot identify suit")
 
-	
+
 
 	#board_list.sort(reverse = True)
 
@@ -267,12 +273,12 @@ use 6h (from ten onwards use letters: Th, Kd")
 	c_board_list = convert_card(board_list)
 	c_board_list.sort(reverse = True)
 
-	
+
 	hand_values["Straight flush"] = check_straight_flush(c_board_list)
 
 	if not hand_values["Straight flush"][0]:
 		hand_values["Four of a kind"] = check_four_kind(c_board_list)
-		
+
 	if not hand_values["Four of a kind"][0]:
 		hand_values["Full house"] = check_full_house(c_board_list)
 
@@ -328,7 +334,7 @@ def convert_card(card_list):
 
 	result = []
 
-	print("your card list: ", card_list)
+	#print("your card list: ", card_list)
 
 	for card_value in card_list:
 
