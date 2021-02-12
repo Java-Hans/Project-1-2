@@ -18,12 +18,11 @@ cv2.imwrite('images2/window.png', cropped_img)
 position_names = ['Dealer', 'Small Blind', 'Big Blind', 'UTG',
                   'UTGp1', 'Mid Pos 1', 'Mid Pos 2', 'Lojack', 'Hijack', 'Cutoff']
 table_size = 10
-players_active = 0
 
 board_cards, board_path = cropped_img[by1:by2,bx1:bx2], 'images2/board_cards.png'
 cv2.imwrite(board_path, board_cards)
-cv2.imshow('board cards',board_cards)
-cv2.waitKey(0)
+# cv2.imshow('board cards',board_cards)
+# cv2.waitKey(0)
 ##board_path = 'images2/board_cards.png'
 board_obj = card_recog2(board_path)
 board_list = board_obj.read_board_cards()
@@ -149,11 +148,8 @@ def find_button10():
             #print('button at positon 9')
         else:
             print('something wrong, cant find button')
-find_button10()
+# find_button10()
 
-# for seat in seat_list:
-#     if seat.get_position() == position_names[0]:
-#         print(seat.get_seat_number() + '  jaaaaaaaa' + seat.get_position())
 
 
 def crop_and_match2(description, the_image, the_threshold, the_template, crop_coord):
@@ -192,43 +188,30 @@ def count_active_players2():
 
     print('Players active: ' + str(active_players))
     return active_players
-players_active = count_active_players2()
+# players_active = count_active_players2()
 
-# for the_player in seat_list:
-#     player_seat = the_player.get_seat_number()
-#
-#     if the_player.get_active():
-#         print(the_player.get_seat_number() + ' is active')
+def find_button_seat(list_seats):
+    for a_seat in list_seats:
+        if a_seat.get_position() == position_names[0]:
+            return list_seats.index(a_seat)
 
-button_index = -1
-for player in seat_list:
-    if player.get_position() == position_names[0]:
-        button_index = seat_list.index(player)
-        print('button indes: ' + str(button_index))
-
-assigned_seats = 0
-k = 1
-
-
-def find_small_blind():
-    for k in range(1,table_size-1):
-        if seat_list[(button_index + k) % table_size].get_active():
-            seat_list[(button_index + k) % table_size].set_position(position_names[1])
-            break
-#find_small_blind()
-
-def test_assign_positions():
+def test_assign_positions(btn_index):
     pos_index = 1
     for p in range(1,table_size):
-        if seat_list[(button_index + p) % table_size].get_active():
-            seat_list[(button_index + p) % table_size].set_position(position_names[pos_index])
+        if seat_list[(btn_index + p) % table_size].get_active():
+            seat_list[(btn_index + p) % table_size].set_position(position_names[pos_index])
             pos_index += 1
-test_assign_positions()
+
+count_active_players2()
+find_button10()
+print(f'Button seat location: {find_button_seat(seat_list)}')
+test_assign_positions(find_button_seat(seat_list))
 
 for seat in seat_list:
-    print(str(seat.get_seat_number()) + ' ' + str(seat.get_position()))
+    print(str(seat.get_seat_number()) + ' ' + str(seat.get_position()) + ', Active: ' + str(seat.get_active()))
 
 # print(hole_cards)
 # print(*board_list)
 
-hand_value_check(myself.get_hole_cards(),*board_list)
+if len(board_list) >= 3 and myself.active:
+    hand_value_check(myself.get_hole_cards(),*board_list)
