@@ -1,0 +1,114 @@
+
+
+Board cards:		 []
+Players active:		 8
+My Hole cards:		 ('8h', 'Kd')
+Button index location	 3
+Player seat Mid Pos 2,		 Active: True
+Seat 1 Lojack,		 Active: True
+Seat 2 None,		 Active: False
+Seat 3 Dealer,		 Active: True
+Seat 4 Small Blind,		 Active: True
+Seat 5 None,		 Active: False
+Seat 6 Big Blind,		 Active: True
+Seat 7 UTG,		 Active: True
+Seat 8 UTGp1,		 Active: True
+Seat 9 Mid Pos 1,		 Active: True
+---------------------------------
+
+Board cards:		 []
+Players active:		 5
+My Hole cards:		 None
+Button index location	 6
+Player seat None,		 Active: False
+Seat 1 None,		 Active: False
+Seat 2 UTG,		 Active: True
+Seat 3 None,		 Active: False
+Seat 4 None,		 Active: False
+Seat 5 UTGp1,		 Active: True
+Seat 6 Dealer,		 Active: True
+Seat 7 None,		 Active: False
+Seat 8 Small Blind,		 Active: True
+Seat 9 Big Blind,		 Active: True
+---------------------------------
+
+Board cards:		 ['2h', 'Jc', '4s']
+Players active:		 5
+My Hole cards:		 None
+Button index location	 6
+Player seat None,		 Active: False
+Seat 1 None,		 Active: False
+Seat 2 UTG,		 Active: True
+Seat 3 None,		 Active: False
+Seat 4 None,		 Active: False
+Seat 5 UTGp1,		 Active: True
+Seat 6 Dealer,		 Active: True
+Seat 7 None,		 Active: False
+Seat 8 Small Blind,		 Active: True
+Seat 9 Big Blind,		 Active: True
+---------------------------------
+
+Board cards:		 ['7d', '8d', 'Ks', '2d']
+Players active:		 4
+My Hole cards:		 None
+Button index location	 5
+Player seat None,		 Active: False
+Seat 1 Big Blind,		 Active: True
+Seat 2 None,		 Active: False
+Seat 3 UTG,		 Active: True
+Seat 4 UTGp1,		 Active: True
+Seat 5 Dealer,		 Active: False
+Seat 6 None,		 Active: False
+Seat 7 None,		 Active: False
+Seat 8 Small Blind,		 Active: True
+Seat 9 None,		 Active: False
+---------------------------------
+
+Board cards:		 ['Kh', '8s', '6h']
+Players active:		 5
+My Hole cards:		 ('7d', '7h')
+Button index location	 8
+Player seat Big Blind,		 Active: True
+Seat 1 None,		 Active: False
+Seat 2 None,		 Active: False
+Seat 3 UTG,		 Active: True
+Seat 4 None,		 Active: False
+Seat 5 None,		 Active: False
+Seat 6 None,		 Active: False
+Seat 7 UTGp1,		 Active: True
+Seat 8 Dealer,		 Active: True
+Seat 9 Small Blind,		 Active: True
+---------------------------------
+
+Board cards:		 ['6h', '2s', 'Ah']
+Players active:		 3
+My Hole cards:		 ('Js', '9s')
+Button index location	 5
+Player seat Big Blind,		 Active: True
+Seat 1 None,		 Active: False
+Seat 2 None,		 Active: False
+Seat 3 None,		 Active: False
+Seat 4 None,		 Active: False
+Seat 5 Dealer,		 Active: True
+Seat 6 None,		 Active: False
+Seat 7 None,		 Active: False
+Seat 8 Small Blind,		 Active: True
+Seat 9 None,		 Active: False
+---------------------------------
+
+Board cards:		 ['2s', 'Qd', '4d']
+Players active:		 5
+My Hole cards:		 ('4h', 'Jh')
+Button index location	 2
+Player seat Mid Pos 1,		 Active: True
+Seat 1 None,		 Active: False
+Seat 2 Dealer,		 Active: False
+Seat 3 None,		 Active: False
+Seat 4 None,		 Active: False
+Seat 5 Small Blind,		 Active: True
+Seat 6 Big Blind,		 Active: True
+Seat 7 UTG,		 Active: True
+Seat 8 UTGp1,		 Active: True
+Seat 9 None,		 Active: False
+---------------------------------
+
