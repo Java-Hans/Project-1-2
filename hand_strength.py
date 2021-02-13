@@ -304,8 +304,9 @@ use 6h (from ten onwards use letters: Th, Kd")
 	for key, x in hand_values.items():
 		print(key, x[0])
 		if x[0]:
-			print("You have a ", key, " ", conv_to_rank_suit(x[1]))
-			return key
+			best_hand = conv_to_rank_suit(x[1])
+			print("You have a ", key, " ", best_hand)
+			return hand_values, best_hand
 			assert False, "This ran after return key"
 			break
 

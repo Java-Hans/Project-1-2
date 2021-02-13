@@ -16,7 +16,7 @@ by1, by2 = int(0.3*y2), int(0.5*y2)
 cards_back_template = cv2.imread('images2/base_img/cards.png', 0)
 cv2.imwrite('images2/window.png', cropped_img)
 
-position_names = ['Dealer', 'Small Blind', 'Big Blind', 'UTG',
+position_names = ['Dealer', 'SB', 'BB', 'UTG',
                   'UTGp1', 'Mid Pos 1', 'Mid Pos 2', 'Lojack', 'Hijack', 'Cutoff']
 table_size = 10
 
@@ -29,7 +29,7 @@ board_obj = CardRecog2(board_path)
 board_list = board_obj.read_board_cards()
 
 
-myself = Player('Player seat')
+myself = Player('P Seat')
 seat_one = Player('Seat 1')
 seat_two = Player('Seat 2')
 seat_three = Player('Seat 3')
@@ -231,8 +231,10 @@ for seat in seat_list:
 # print(hole_cards)
 # print(*board_list)
 
+h_values, my_b_hand = None, None
+
 if len(board_list) >= 3 and myself.active:
-    hand_value_check(myself.get_hole_cards(),*board_list)
+    h_values, my_b_hand = hand_value_check(myself.get_hole_cards(),*board_list)
 
 with open("Output.txt", "a") as text_file:
     text_file.write(f'Board cards:\t\t {board_list}\n')
@@ -241,6 +243,12 @@ with open("Output.txt", "a") as text_file:
     text_file.write(f'Button index location\t {button_location}\n')
     for seat in seat_list:
         text_file.write(str(seat.get_seat_number()) + ' ' + str(seat.get_position()) + ',\t\t Active: ' + str(seat.get_active()) + '\n')
+    if len(board_list) >= 3 and myself.active:
+        for key, x in h_values.items():
+            text_file.write(f'{key}, {x[0]}\n')
+            if x[0]:
+                break
+        text_file.write(str(my_b_hand) + '\n')
     text_file.write(f'---------------------------------\n\n')
 
 

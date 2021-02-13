@@ -42,7 +42,7 @@ class CardRecog2:
 					new_match_list.append(sloc)
 
 				for sloc2 in new_match_list:
-					if abs(sloc2[0] - sloc[0])/sloc[0] < 0.01:
+					if abs(sloc2[0] - sloc[0])/sloc[0] < 0.015:
 						repeat = True
 
 				if not repeat:
