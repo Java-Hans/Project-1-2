@@ -3,6 +3,8 @@ class Player:
         self.seat_number = seat_number
         self.active = False
         self.position = None
+        self.stack = -1
+        self.player_name = ''
 
     def get_seat_number(self):
         return self.seat_number
@@ -37,3 +39,15 @@ class Player:
 
     def get_hole_cards(self):
         return tuple(self.hole_card_list)
+
+    def set_stack(self, stack):
+        self.stack = stack
+
+    def get_stack(self):
+        return self.stack
+
+    def set_player_name(self, player_name):
+        self.player_name = player_name
+
+    def get_player_name(self):
+        return self.player_name

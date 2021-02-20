@@ -5,6 +5,7 @@ from cardrecog2 import CardRecog2
 from Player import Player
 from hand_strength import hand_value_check
 import time
+import pytesseract
 
 # from hand_strength import HandStrength
 
@@ -30,6 +31,7 @@ table_size = 10
 ##board_path = 'images2/board_cards.png'
 board_obj = CardRecog2(board_path)
 board_list = board_obj.read_board_cards()
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 myself = Player('P Seat')
 seat_one = Player('Seat 1')
@@ -172,12 +174,17 @@ def find_button10(the_image):
 
 # find_button10()
 
-
+# returns true
 def crop_and_match2(description, the_image, the_threshold, the_template, crop_coord):
+    """
+    Returns the True/False match based on image and co ordinates vs template
+    Also returns a list of strings from Tesseract (split by empty space).
+    """
     any_match = False
     i_height, i_width = the_image.shape[:2]
     cx1, cx2, cy1, cy2 = crop_coord[0], crop_coord[1], crop_coord[2], crop_coord[3]
     cropped_window = the_image[int(cy1 * i_height):int(cy2 * i_height), int(cx1 * i_width):int(cx2 * i_width)]
+    tess_string_list = pytesseract.image_to_string(cropped_window).split()
     match_result = cv2.matchTemplate(cropped_window, the_template, cv2.TM_CCOEFF_NORMED)
     match_location = np.where(match_result >= the_threshold)
     list_of_match = list(zip(*match_location[::-1]))
@@ -190,7 +197,7 @@ def crop_and_match2(description, the_image, the_threshold, the_template, crop_co
     # cv2.imshow(description, cropped_window)
     # cv2.waitKey(0)
 
-    return any_match
+    return any_match, tess_string_list
 
 
 def count_active_players2(the_image, hole_card_obj):
@@ -198,10 +205,24 @@ def count_active_players2(the_image, hole_card_obj):
     myself_active, my_hole_cards = hole_card_obj.match_hole_cards()
     for player in seat_list:
 
-        if crop_and_match2(player.get_seat_number(), the_image, 0.85, cards_back_template,
-                           player.get_hole_card_crop()):
+        match_bool, tess_list = crop_and_match2(player.get_seat_number(), the_image, 0.85, cards_back_template,
+                           player.get_hole_card_crop())
+
+        # if crop_and_match2(player.get_seat_number(), the_image, 0.85, cards_back_template,
+        #                    player.get_hole_card_crop()):
+        if match_bool:
             active_players += 1
             player.set_active(True)
+            for tess_word in tess_list:
+                tess_word = tess_word.replace(',', '')
+                try:
+                    the_stack = float(tess_word)
+                    player.set_stack(the_stack)
+                except ValueError:
+                    pass
+            # if len(tess_list) > 1:
+            #     player.set_player_name(tess_list[0])
+            #     player.set_stack(tess_list[1])
         else:
             player.set_active(False)
     if myself_active:
@@ -231,7 +252,7 @@ def test_assign_positions(btn_index):
 old_button = None
 new_button = None
 
-for x in range(12):
+for x in range(1):
     the_time = str(round(time.time()))
     img_gray2 = pyautogui.screenshot()
     img_gray2 = cv2.cvtColor(np.array(img_gray2), cv2.COLOR_RGB2GRAY)
@@ -276,6 +297,21 @@ for x in range(12):
     if len(board_list) >= 3 and myself.active:
         h_values, my_b_hand = hand_value_check(myself.get_hole_cards(), *board_list)
 
+    the_seat = seat_one
+    xx1, xx2, yy1, yy2 = the_seat.get_hole_card_crop()
+    xx1 = int(xx1*x2)
+    xx2 = int(xx2*x2)
+    yy1 = int(yy1*y2)
+    yy2 = int(yy2*y2)
+
+    crop_hole_cards = cropped_img2[yy1:yy2, xx1:xx2]
+    cv2.imwrite('images2/' + the_seat.get_seat_number() + '.png', crop_hole_cards)
+    # 'images2/board_cards.png'
+
+    cv2.imshow('hole cards', crop_hole_cards)
+    cv2.waitKey(0)
+
+
     with open("Output.txt", "a") as text_file:
         text_file.write(the_time + '\n')
         text_file.write(f'Board cards:\t\t {board_list}\n')
@@ -284,7 +320,8 @@ for x in range(12):
         text_file.write(f'Button index location\t {new_button}\n')
         for seat in seat_list:
             text_file.write(str(seat.get_seat_number()) + ' ' + str(seat.get_position()) + ',\t\t Active: ' + str(
-                seat.get_active()) + '\n')
+                seat.get_active()) + ' ' + 'Stack: ' + str(seat.get_stack()) + '\n')
+                # seat.get_active()) + '\n')
         if len(board_list) >= 3 and myself.active:
             for key, x in h_values.items():
                 text_file.write(f'{key}, {x[0]}\n')

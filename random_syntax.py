@@ -1,16 +1,21 @@
-# C:\Users\hansc\PycharmProjects\Project-1-2\venv\Scripts\python.exe C:/Users/hansc/PycharmProjects/Project-1-2/random_syntax.py
-# before: [((123, 53), 'Spades'), ((180, 52), 'Hearts'), ((63, 52), 'Clubs')]
-# after: [((63, 52), 'Clubs'), ((123, 53), 'Spades'), ((180, 52), 'Hearts')]
-#
-# Process finished with exit code 0
-# total_amount = 21
-#
-# with open("Output.txt", "w") as text_file:
-#     print(f"Purchase Amount: {total_amount}", file=text_file)
+import cv2
+import pytesseract
 
-# with open("Output.txt", "a") as text_file:
-#     for i in range(2):
-#         text_file.write(f"a number: {i}\n")
-import time
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+img = cv2.imread('images2/Seat_7.png')
+img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+result = pytesseract.image_to_string(img).split()
+# result = pytesseract.image_to_string(img)
+print(result)
+for a in result:
+    a = a.replace(',', '')
+    try:
+        float(a)
+        print(f'stack size is {a}')
+    except ValueError:
+        print(f'not a number: {a}')
 
-print(round(time.time()))
+cv2.imshow('results',img)
+cv2.waitKey(0)
+
+
